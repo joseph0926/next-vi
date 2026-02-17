@@ -2,11 +2,11 @@
 
 - Status: Draft
 - Last Updated: 2026-02-17
-- Parent RFC: `./next16-routing-cache-observability-cli-rfc.md`
-- Technical RFC: `./next16-routing-cache-observability-technical-rfc.md`
-- Commands RFC: `./next16-routing-cache-observability-commands-rfc.md`
-- Terms: `./next16-routing-cache-observability-terms.md`
-- Mermaid RFC: `./next16-routing-cache-observability-mermaid-rfc.md`
+- Parent RFC: `./cli-rfc.md`
+- Technical RFC: `./technical-rfc.md`
+- Commands RFC: `./commands-rfc.md`
+- Terms: `./terms.md`
+- Mermaid RFC: `./mermaid-rfc.md`
 
 ## 1. Summary
 

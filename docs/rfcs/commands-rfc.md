@@ -2,8 +2,8 @@
 
 - Status: Draft
 - Last Updated: 2026-02-17
-- Parent RFC: `./next16-routing-cache-observability-cli-rfc.md`
-- Technical RFC: `./next16-routing-cache-observability-technical-rfc.md`
+- Parent RFC: `./cli-rfc.md`
+- Technical RFC: `./technical-rfc.md`
 
 ## 1. Summary
 

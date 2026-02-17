@@ -2,7 +2,7 @@
 
 - Version: v0.1-draft
 - Last Updated: 2026-02-17
-- Parent RFC: `./next16-routing-cache-observability-cli-rfc.md`
+- Parent RFC: `./cli-rfc.md`
 
 ## 1. 식별자 계층
 

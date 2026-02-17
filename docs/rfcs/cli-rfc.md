@@ -361,4 +361,4 @@ A8. `base`는 기준 리포트(예: main, 이전 배포), `head`는 비교 대�
 - Next.js 16 Release Notes: https://nextjs.org/blog/next-16
 - Next.js MCP Guide: https://nextjs.org/docs/app/guides/mcp
 - React Profiler: https://react.dev/reference/react/Profiler
-- Glossary (local): ./next16-routing-cache-observability-terms.md
+- Glossary (local): ./terms.md

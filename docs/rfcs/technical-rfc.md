@@ -3,9 +3,9 @@
 - Status: Draft
 - Last Updated: 2026-02-17
 - Owner: next-vi core
-- Parent RFC: `./next16-routing-cache-observability-cli-rfc.md`
-- Terms: `./next16-routing-cache-observability-terms.md`
-- Commands Spec: `./next16-routing-cache-observability-commands-rfc.md`
+- Parent RFC: `./cli-rfc.md`
+- Terms: `./terms.md`
+- Commands Spec: `./commands-rfc.md`
 
 ## 1. Summary
 
@@ -86,17 +86,53 @@
 - 단위/통합: `vitest`
 - E2E fixture 앱: Next.js 16 샘플 앱 + CLI 호출 스크립트
 
-## 5. 제안 모듈 구조
+### 4.6 TypeScript 설정 전략 (결정)
+
+결정:
+- 루트 `tsconfig.base.json`에 공통 컴파일 옵션을 둔다.
+- 각 워크스페이스(`packages/contracts`, `packages/core`, `packages/cli`, `apps/fixture-next16`)는 자체 `tsconfig.json`에서 루트 base를 `extends`한다.
+- 루트 `tsconfig.json`은 워크스페이스 레퍼런스/에디터 기준점으로 사용하고, 패키지 `tsc` 실행의 단일 소스로 사용하지 않는다.
+
+근거:
+- 패키지별 요구사항이 다르다.
+  - `cli`: bin 엔트리/실행 환경 중심
+  - `contracts`: 타입/스키마 안정성 중심
+  - `core`: 도메인 로직 및 내부 모듈 분리 중심
+  - `fixture-next16`: Next.js 앱 구성 제약
+- 모노레포에서 패키지 단위 `tsc -p` 실행이 가능해야 Turbo 캐시/병렬화/실패 지점 식별이 명확해진다.
+- 루트 단일 `tsconfig`를 패키지에서 직접 재사용하면 패키지별 `include`/`exclude`/`emit` 제어가 어렵고, 설정 충돌 시 전체 파이프라인 실패 가능성이 커진다.
+
+운영 규칙:
+- 공통 규칙 변경은 `tsconfig.base.json`에서만 수행한다.
+- 패키지 로컬 `tsconfig.json`에는 해당 패키지에 필요한 차이(엔트리, 출력, 테스트 타입)만 둔다.
+- 빌드 전용 옵션이 필요하면 각 패키지 `tsconfig.build.json`을 추가한다.
+
+## 5. 워크스페이스 구조 (결정)
 
 ```text
+apps/
+  fixture-next16/      # E2E fixture Next.js 16 샘플 앱
+
 packages/
-  collector-next/      # Next 어댑터 + 이벤트 수집
-  collector-fallback/  # 로그/네트워크 read-only 수집
-  storage/             # JSONL writer, dedupe
-  analyzer/            # nav 집계, 원인 추론, 영향도 계산
-  reporter/            # report/diff JSON 생성, summary 렌더
-  cli/                 # record/report/diff 엔트리
   contracts/           # zod 스키마, 타입, 버전 정책
+  core/                # collector/storage/analyzer/reporter 내부 모듈
+  cli/                 # record/report/diff 엔트리
+```
+
+원칙:
+- 패키지 경계는 `contracts`, `core`, `cli` 3개로 유지한다.
+- `collector-next`, `collector-fallback`, `storage`, `analyzer`, `reporter`는 `core` 내부 모듈로 구현한다.
+- `core` 분해(추가 패키지 생성)는 실제 병목/의존성 격리 필요가 확인될 때 별도 RFC로 결정한다.
+
+`core` 내부 예시 구조:
+```text
+packages/core/src/
+  collectors/
+    next/
+    fallback/
+  storage/
+  analyzer/
+  reporter/
 ```
 
 ## 6. 데이터 계약
@@ -223,7 +259,7 @@ interface CollectorAdapter {
 ## 10. Commands 분리 문서
 
 CLI 명세(`record`, `report`, `diff`)는 다음 문서로 분리한다.  
-`./next16-routing-cache-observability-commands-rfc.md`
+`./commands-rfc.md`
 
 ## 11. 보안/마스킹 파이프라인
 
@@ -294,8 +330,9 @@ CLI 명세(`record`, `report`, `diff`)는 다음 문서로 분리한다.
 ## 16. 구현 체크리스트 (초기 2주)
 
 - [ ] `contracts` 패키지 작성 (Event/Report/Diff zod)
-- [ ] `storage` 패키지 작성 (JSONL/dedupe)
+- [ ] `core` 패키지 작성 (collector/storage/analyzer/reporter 내부 모듈)
 - [ ] `cli record/report/diff` 엔트리 작성
+- [ ] `tsconfig.base.json` + 패키지별 `tsconfig.json`(extends) 구성
 - [ ] `report --view summary` 템플릿 렌더 구현
 - [ ] commands 분리 문서와 실제 CLI 옵션 동기화
 - [ ] 골든 시나리오 fixture 20개 확보
