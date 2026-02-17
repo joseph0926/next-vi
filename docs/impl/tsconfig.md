@@ -1,3 +1,4 @@
+<!-- AI_STATUS: COMPLETED -->
 # TSConfig 구현 노트 (2026-02-17)
 
 ## 1) 구현 요약

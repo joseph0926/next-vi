@@ -1,3 +1,4 @@
+<!-- AI_STATUS: COMPLETED -->
 # 워크스페이스 패키지 매니페스트 계획
 
 - 작성일: 2026-02-17
@@ -60,8 +61,8 @@
 - `dependencies`: `@next-vi/contracts`, `@next-vi/core`, `commander`
 - `scripts`: `build`, `typecheck`, `lint`, `test`, `clean`
 
-## 5. 다음 작업 제안
+## 5. 완료 항목
 
-1. 이 문서 기준으로 3개 패키지 `package.json` 실제 생성
-2. 각 패키지 `tsconfig` 및 엔트리 파일 최소 골격 생성
-3. `pnpm lint && pnpm typecheck && pnpm test && pnpm build`로 파이프라인 확인
+1. `packages/contracts`, `packages/core`, `packages/cli`의 `package.json` 생성 완료
+2. 각 패키지 `tsconfig` 및 엔트리 파일 골격 생성 완료
+3. `pnpm lint && pnpm typecheck && pnpm test && pnpm build` 검증 완료
