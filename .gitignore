@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Package manager caches
+.pnpm-store/
+.npm/
+
+# Turbo
+.turbo/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# npm package artifacts
+*.tgz
+
+# Avoid mixed lockfiles when using pnpm
+package-lock.json
+npm-shrinkwrap.json
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
