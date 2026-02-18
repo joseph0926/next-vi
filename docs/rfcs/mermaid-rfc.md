@@ -98,7 +98,8 @@ flowchart TD
   RV --> STA["static_possible routes from code graph"]
   OBS --> UNI["affectedRoutesEstimate = observed ∪ static_possible"]
   STA --> UNI
-  UNI --> CONF["confidence (high|medium|low)"]
+  UNI --> SCORE["confidenceScore (0~1)"]
+  SCORE --> CONF["confidenceLevel (high|medium|low)"]
   UNI --> OUT["report.invalidations[]"]
 ```
 

@@ -88,9 +88,18 @@
 - 최종 추정 집합 크기.
 - 계산식: `observed ∪ static_possible`.
 
-### `confidence`
-- 영향도 추정 신뢰도 레벨.
+### `confidenceScore`
+- 영향도/원인 추정 신뢰 점수(0~1 실수).
+- 계산/정렬/임계값 판정에 사용하는 기준 값.
+
+### `confidenceLevel`
+- 사람이 읽는 3단계 신뢰도 레벨.
 - 값: `high`, `medium`, `low`.
+- 매핑:
+  - `high`: `confidenceScore >= 0.80`
+  - `medium`: `0.50 <= confidenceScore < 0.80`
+  - `low`: `confidenceScore < 0.50`
+- 화면/CLI에서는 `confidence: 0.93 (high)`처럼 score+level 동시 표기를 권장한다.
 
 ## 5. 운영 지표(DoD 관련)
 

@@ -247,7 +247,8 @@ interface CollectorAdapter {
 
 출력:
 - `causeCode`
-- `confidence` (`high|medium|low`)
+- `confidenceScore` (`0~1`)
+- `confidenceLevel` (`high|medium|low`, score 기반 파생)
 - `actionHint`
 
 ## 9.3 영향도 계산

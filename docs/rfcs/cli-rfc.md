@@ -175,7 +175,7 @@ NAV nav_01  /products -> /products/42  kind=push  total=1284ms  status=hard_relo
 RSC  chunks=9  bytes=178KB  ttfb=220ms
 FETCH  hit=12  stale=2  miss=1
 INVALIDATION  revalidateTag("products","max")  caller=app/actions.ts:updateProduct
-IMPACT  affected_routes_estimate=7  observed=3  static_possible=4  confidence=0.93
+IMPACT  affected_routes_estimate=7  observed=3  static_possible=4  confidence=0.93(high)
 TOP_CAUSE  [high] stale-while-revalidate served before refresh completed
 NEXT_ACTION  verify tag scope("products") and split broad tag into detail tags
 ```
@@ -222,7 +222,7 @@ NEXT_ACTION  verify tag scope("products") and split broad tag into detail tags
 - 완화: 기본 강한 마스킹, opt-in 정책, 비밀 패턴 강제 제거
 
 3. 판정 정확도 과신 위험
-- 완화: 이벤트별 신뢰도 레벨 표시(`high`/`medium`/`low`)
+- 완화: 이벤트별 신뢰 점수+레벨 동시 표시(`confidenceScore`, `confidenceLevel`)
 
 ## 12. Milestones (6 Weeks)
 
@@ -256,7 +256,7 @@ Q2. "App Router 기반 프로젝트에서 답하기 어렵다"는 주장이 사�
 A2. 공식 문서 기준으로 캐시 계층은 Router/Data/Full Route Cache처럼 분리 설명되며, `revalidatePath`/`revalidateTag`도 호출 컨텍스트별 동작이 다르다. 공식 디버깅 문서는 주로 런타임 디버거 중심이고, 캐시 무효화 영향도를 내비게이션 단위로 통합 시각화하는 전용 OSS는 확인 시점 기준 희소했다. 따라서 "통합 관측/영향도 추적" 공백은 유효하다고 판단한다.
 
 Q3. 코드 기반으로 `revalidate(tag|path)` 영향도는 어떻게 계산하나요?  
-A3. 정적 분석과 실행 관측을 결합한다. 정적 분석으로 라우트 트리와 `revalidatePath`/`revalidateTag`/태그 사용 지점을 수집하고, 실행 중에는 실제 invalidation 및 cache read 이벤트를 기록한다. 최종 영향도는 `affectedRoutesEstimate = observed ∪ static_possible`로 계산하고, `confidence = high|medium|low`를 함께 제공한다.
+A3. 정적 분석과 실행 관측을 결합한다. 정적 분석으로 라우트 트리와 `revalidatePath`/`revalidateTag`/태그 사용 지점을 수집하고, 실행 중에는 실제 invalidation 및 cache read 이벤트를 기록한다. 최종 영향도는 `affectedRoutesEstimate = observed ∪ static_possible`로 계산하고, `confidenceScore(0~1)`를 산출한 뒤 `confidenceLevel(high|medium|low)`로 파생해 함께 제공한다.
 
 Q4. "출력은 사람이 읽기 쉬운 요약"이 추상적이지 않나요?  
 A4. RFC는 `report` 저장 포맷을 JSON 단일로 고정하고, CLI 텍스트 요약은 `--view summary` 렌더링 규격으로만 제공한다. 즉 교환/자동화는 JSON 1개로 통일하고, 사람용 읽기 포맷은 JSON에서 파생한다.
@@ -290,8 +290,8 @@ A8. `base`는 기준 리포트(예: main, 이전 배포), `head`는 비교 대�
 
 완료 기준(DoD):
 - 골든 시나리오 20/20 통과
-- 비정상 종료 분류 F1 `>= 0.95`
-- 수집 오버헤드 p95 `< 5%`
+- 비정상 종료 분류 임계값은 `../plan/fixture-next16-golden-scenarios.md` Gate C 기준 준수
+- 수집 오버헤드/리포트 처리 시간은 `../plan/fixture-next16-golden-scenarios.md` Gate D 측정 정책 준수
 
 ### 15.2 v1.0 팀 적용 (주 3-6)
 

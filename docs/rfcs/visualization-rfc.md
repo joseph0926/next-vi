@@ -55,7 +55,7 @@ v1.0 범위의 진실 소스는 `report JSON`이며, 시각화는 해당 JSON을
 공통 구조:
 - Header: `traceId`, `schemaVersion`, 생성 시각, 필터
 - Primary Tabs: `Overview`, `Timeline`, `Segment Tree`, `Invalidation`, `Diff`
-- Side Panel: 선택 객체 상세(raw event, caller, confidence)
+- Side Panel: 선택 객체 상세(raw event, caller, confidenceScore/confidenceLevel)
 
 탭별 목적:
 - `Overview`: 전체 요약 카드 + 주요 원인 상위 3개
@@ -76,7 +76,7 @@ v1.0 범위의 진실 소스는 `report JSON`이며, 시각화는 해당 JSON을
 +--------------------------------------+-------------------------------------------+
 | TOP_CAUSE #1                         | NEXT_ACTION                               |
 | stale-while-revalidate before refresh| split broad tag: products -> detail tags  |
-| confidence: high                     | owner: app/actions.ts:updateProduct       |
+| confidence: 0.92 (high)              | owner: app/actions.ts:updateProduct       |
 +--------------------------------------+-------------------------------------------+
 | TOP_CAUSE #2 ...                                                                  |
 +----------------------------------------------------------------------------------+
@@ -132,7 +132,7 @@ top_cause delta: cache_miss_ratio_up (medium -> high)
 - Timeline에서 nav 선택 시 전체 탭의 컨텍스트를 해당 nav로 동기화
 - Invalidation에서 tag/path 선택 시 Timeline에서 관련 이벤트 하이라이트
 - Diff에서 delta 항목 클릭 시 base/head 상세 카드 동시 표시
-- 모든 상세 패널은 `confidence`와 `evidence`를 함께 표기
+- 모든 상세 패널은 `confidenceScore`, `confidenceLevel`, `evidence`를 함께 표기
 
 ## 8. 상태/오류 처리
 
